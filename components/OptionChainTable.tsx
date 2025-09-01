@@ -1,44 +1,64 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { OptionContract } from '@/lib/types';
+import React from "react";
+import { OptionContract } from "@/lib/types";
 
 interface Props {
-  chain: OptionContract[];
+  /** Array of option contracts to display */
+  contracts: OptionContract[];
 }
 
-export default function OptionChainTable({ chain }: Props) {
-  if (!chain || chain.length === 0) {
-    return <div>No options data</div>;
-  }
+/**
+ * Renders a simple options chain table with common contract fields. The
+ * table displays strike, type (call/put), bid, ask, last price,
+ * volume, open interest and implied volatility. Missing numeric fields
+ * render as a dash to avoid showing `undefined`.
+ */
+export default function OptionChainTable({ contracts }: Props) {
   return (
-    <div className="overflow-x-auto mt-4">
-      <table className="min-w-full border">
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse text-sm">
         <thead>
-          <tr>
-            <th className="px-2 py-1 border">Strike</th>
-            <th className="px-2 py-1 border">Type</th>
-            <th className="px-2 py-1 border">Expiration</th>
-            <th className="px-2 py-1 border">Bid</th>
-            <th className="px-2 py-1 border">Ask</th>
-            <th className="px-2 py-1 border">Last</th>
-            <th className="px-2 py-1 border">Volume</th>
-            <th className="px-2 py-1 border">Open Int</th>
-            <th className="px-2 py-1 border">IV%</th>
+          <tr className="bg-gray-100">
+            <th className="border px-2 py-1 text-left">Strike</th>
+            <th className="border px-2 py-1 text-left">Type</th>
+            <th className="border px-2 py-1 text-left">Bid</th>
+            <th className="border px-2 py-1 text-left">Ask</th>
+            <th className="border px-2 py-1 text-left">Last</th>
+            <th className="border px-2 py-1 text-left">Vol</th>
+            <th className="border px-2 py-1 text-left">OI</th>
+            <th className="border px-2 py-1 text-left">IV</th>
           </tr>
         </thead>
         <tbody>
-          {chain.map((opt) => (
-            <tr key={`${opt.symbol}-${opt.strike}-${opt.expiration}-${opt.type}`}> 
-              <td className="px-2 py-1 border">{opt.strike}</td>
-              <td className="px-2 py-1 border capitalize">{opt.type}</td>
-              <td className="px-2 py-1 border">{opt.expiration}</td>
-              <td className="px-2 py-1 border">{opt.bid}</td>
-              <td className="px-2 py-1 border">{opt.ask}</td>
-              <td className="px-2 py-1 border">{opt.lastPrice}</td>
-              <td className="px-2 py-1 border">{opt.volume}</td>
-              <td className="px-2 py-1 border">{opt.openInterest}</td>
-              <td className="px-2 py-1 border">{opt.impliedVolatility}</td>
+          {contracts.map((c, i) => (
+            <tr key={i} className="odd:bg-white even:bg-gray-50">
+              <td className="border px-2 py-1">{c.strike}</td>
+              <td className="border px-2 py-1 capitalize">{c.type}</td>
+              <td className="border px-2 py-1">
+                {c.bid !== undefined && c.bid !== null ? c.bid : "-"}
+              </td>
+              <td className="border px-2 py-1">
+                {c.ask !== undefined && c.ask !== null ? c.ask : "-"}
+              </td>
+              <td className="border px-2 py-1">
+                {c.lastPrice !== undefined && c.lastPrice !== null
+                  ? c.lastPrice
+                  : "-"}
+              </td>
+              <td className="border px-2 py-1">
+                {c.volume !== undefined && c.volume !== null ? c.volume : "-"}
+              </td>
+              <td className="border px-2 py-1">
+                {c.openInterest !== undefined && c.openInterest !== null
+                  ? c.openInterest
+                  : "-"}
+              </td>
+              <td className="border px-2 py-1">
+                {c.impliedVolatility !== undefined && c.impliedVolatility !== null
+                  ? c.impliedVolatility
+                  : "-"}
+              </td>
             </tr>
           ))}
         </tbody>

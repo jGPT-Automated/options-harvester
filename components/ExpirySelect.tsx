@@ -1,21 +1,29 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
-interface ExpirySelectProps {
+interface Props {
+  /** Array of available expiration dates (formatted as YYYY‑MM‑DD) */
   expiries: string[];
+  /** Currently selected expiry */
   selected: string;
-  onChange: (expiry: string) => void;
+  /** Callback invoked when the user selects a new expiry */
+  onSelect: (expiry: string) => void;
 }
 
-export default function ExpirySelect({ expiries, selected, onChange }: ExpirySelectProps) {
+/**
+ * Dropdown selector for options expiration dates. Displays a select box
+ * populated with the provided `expiries` array. The currently selected
+ * expiry is controlled via the `selected` prop. When the user chooses
+ * a new expiry, the `onSelect` callback is called with the new value.
+ */
+export default function ExpirySelect({ expiries, selected, onSelect }: Props) {
   return (
     <div className="mb-4">
-      <label className="mr-2">Expiry:</label>
       <select
         value={selected}
-        onChange={(e) => onChange(e.target.value)}
-        className="border rounded p-2"
+        onChange={(e) => onSelect(e.target.value)}
+        className="p-2 border rounded"
       >
         {expiries.map((exp) => (
           <option key={exp} value={exp}>
